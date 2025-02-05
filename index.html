@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 Error - Page Not Found</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Fake Error Screen -->
+    <div id="error-screen">
+        <h1>404 Error: Page Not Found</h1>
+        <p>Oops! Something went wrong. The page you're looking for doesn't exist.</p>
+        <p>To gain access, please click on the following button below to begin going through a series of high-level security questions to verify your identity.</p>
+        <button id="continue-btn">Continue</button>
+    </div>
+
+    <!-- Question Screens -->
+    <div id="quiz-screen" class="hidden">
+        <h1 id="question-header">Question <span id="question-number">1</span> | Difficulty: <span id="difficulty-level">Easy</span></h1>
+        <p id="question-text">[Your Question Here]</p>
+        <input type="text" id="answer-input" placeholder="Type your answer here...">
+        <button id="submit-btn">Submit</button>
+    </div>
+
+    <!-- Congratulations Screen -->
+    <div id="congrats-screen" class="hidden">
+        <h1>Congratulations! 🎉</h1>
+        <p>You’ve successfully answered all the questions.</p>
+        <p>A special someone would like to ask you a question.</p>
+        <button id="reveal-btn">Reveal Question</button>
+    </div>
+
+    <!-- Valentine Screen -->
+    <div id="valentine-screen" class="screen hidden">
+        <h1>Will you be my Valentine? ❤️</h1>
+        <button id="yes-btn">Yes!</button>
+        <button id="no-btn">No</button>
+    </div>
+
+    <!-- Final Screen with GIF -->
+    <div id="final-screen" class="screen hidden">
+        <h1>🎉🎉🎉🎉🎉🎉🎉🎉🎉</h1>
+        <!-- Placeholder for your GIF -->
+        <img id="special-gif" src="baobei.GIF" alt="Special Moment">
+        <p>❤️❤️❤️</p>
+    </div>
+
+    <script>
+        // Quiz Data (Replace placeholders with actual questions, answers, and hints)
+        const quizData = [
+            { question: "Question 1 text here?", answer: "correctAnswer1", difficulty: "Easy", hint: "Hint for question 1" },
+            { question: "Question 2 text here?", answer: "correctAnswer1", difficulty: "Easy", hint: "Hint for question 2" },
+            { question: "Question 3 text here?", answer: "correctAnswer1", difficulty: "Medium", hint: "Hint for question 3" },
+            { question: "Question 4 text here?", answer: "correctAnswer1", difficulty: "Medium", hint: "Hint for question 4" },
+            { question: "Question 5 text here?", answer: "correctAnswer1", difficulty: "Hard", hint: "Hint for question 5" },
+            { question: "Question 6 text here?", answer: "correctAnswer1", difficulty: "Hard", hint: "Hint for question 6" }
+        ];
+
+        let currentQuestionIndex = 0;
+
+        document.getElementById("continue-btn").addEventListener("click", function() {
+            document.getElementById("error-screen").style.display = "none";
+            document.getElementById("quiz-screen").style.display = "block";
+            loadQuestion();
+        });
+
+        document.getElementById("submit-btn").addEventListener("click", function() {
+            const userAnswer = document.getElementById("answer-input").value.trim().toLowerCase();
+            const correctAnswer = quizData[currentQuestionIndex].answer.toLowerCase();
+
+            if (userAnswer === correctAnswer) {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < quizData.length) {
+                    loadQuestion();
+                } else {
+                    document.getElementById("quiz-screen").style.display = "none";
+                    document.getElementById("congrats-screen").style.display = "block";
+                }
+            } else {
+                alert("Incorrect answer! Hint: " + quizData[currentQuestionIndex].hint);
+            }
+        });
+
+        document.getElementById("reveal-btn").addEventListener("click", function() {
+            document.getElementById("congrats-screen").style.display = "none";
+            document.getElementById("valentine-screen").style.display = "block";
+        });
+
+        document.getElementById("yes-btn").addEventListener("click", function() {
+            document.getElementById("valentine-screen").style.display = "none";
+            document.getElementById("final-screen").style.display = "block";
+
+            // Trigger confetti animation
+            confetti({
+                particleCount: 200,
+                spread: 70,
+                origin: { x: 0.5, y: 0.5 } // Center of the screen
+            });
+        });
+
+        function loadQuestion() {
+            const difficultySpan = document.getElementById("difficulty-level");
+            const currentDifficulty = quizData[currentQuestionIndex].difficulty.toLowerCase();
+
+            document.getElementById("question-number").textContent = currentQuestionIndex + 1;
+            document.getElementById("question-text").textContent = quizData[currentQuestionIndex].question;
+            document.getElementById("answer-input").value = ""; // Clear input
+
+            difficultySpan.textContent = quizData[currentQuestionIndex].difficulty;
+            difficultySpan.className = ""; // Reset class
+            difficultySpan.classList.add(currentDifficulty); // Apply difficulty color
+        }
+
+        const noBtn = document.getElementById("no-btn");
+
+        noBtn.addEventListener("mouseover", function () {
+            // Get window width and height
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+
+            // Generate random positions within screen boundaries
+            const randomX = Math.random() * (screenWidth - noBtn.clientWidth);
+            const randomY = Math.random() * (screenHeight - noBtn.clientHeight);
+
+            // Apply new position
+            noBtn.style.position = "absolute";
+            noBtn.style.left = `${randomX}px`;
+            noBtn.style.top = `${randomY}px`;
+        });
+
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+</body>
+</html>
