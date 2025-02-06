@@ -9,7 +9,7 @@
 <body>
     <!-- Fake Error Screen -->
     <div id="error-screen">
-        <h1>404 Error: Page Not Found</h1>
+        <h1>404 Error: Page Not Found </h1>
         <p>Oops! Something went wrong. The page you're looking for doesn't exist.</p>
         <p>To gain access, please click on the following button below to begin going through a series of high-level security questions to verify your identity.</p>
         <button id="continue-btn">Continue</button>
@@ -41,20 +41,50 @@
     <!-- Final Screen with GIF -->
     <div id="final-screen" class="screen hidden">
         <h1>🎉🎉🎉🎉🎉🎉🎉🎉🎉</h1>
-        <!-- Placeholder for your GIF -->
         <img id="special-gif" src="baobei.GIF" alt="Special Moment">
         <p>❤️❤️❤️</p>
     </div>
 
+    <audio id="background-music" src="audio.mp3"></audio>
+
     <script>
-        // Quiz Data (Replace placeholders with actual questions, answers, and hints)
         const quizData = [
-            { question: "Question 1 text here?", answer: "correctAnswer1", difficulty: "Easy", hint: "Hint for question 1" },
-            { question: "Question 2 text here?", answer: "correctAnswer1", difficulty: "Easy", hint: "Hint for question 2" },
-            { question: "Question 3 text here?", answer: "correctAnswer1", difficulty: "Medium", hint: "Hint for question 3" },
-            { question: "Question 4 text here?", answer: "correctAnswer1", difficulty: "Medium", hint: "Hint for question 4" },
-            { question: "Question 5 text here?", answer: "correctAnswer1", difficulty: "Hard", hint: "Hint for question 5" },
-            { question: "Question 6 text here?", answer: "correctAnswer1", difficulty: "Hard", hint: "Hint for question 6" }
+            { 
+                question: "Who is my current favorite EDM artist?", 
+                answers: ["Martin Garrix"], 
+                difficulty: "Easy", 
+                hint: "No hints for easy questions 😤😤" 
+            },
+            { 
+                question: "Which cologne do I currently like? (exact name, excluding the brand name)", 
+                answers: ["Peony & Blush Suede"], 
+                difficulty: "Easy", 
+                hint: "No hints for easy questions 😤😤"
+            },
+            { 
+                question: "On our Little Tokyo adventure in LA, name one of the snacks that we tried (in their Japanese name).", 
+                answers: ["Dango", "Hotteok"], 
+                difficulty: "Medium", 
+                hint: "One of these snacks we tried when eating at GEN Korean BBQ." 
+            },
+            { 
+                question: "Speaking of that day, list the events that happened in chronological order, without looking at your notes. (Answer format example: ‘ABCDEF’)<br><br>A. Went to Little Tokyo<br>B. Walked around IKEA<br>C. Ate at Lunasia Dim Sum House<br>D. Visited the Broad Museum<br>E. Stopped by Signal Hill<br>F. Bought cookies and a drink from 85° Bakery", 
+                answers: ["CFDABE"], 
+                difficulty: "Medium", 
+                hint: "Hmmmmmm I'm thinking no hint for this either 😗" 
+            },
+            { 
+                question: "We visited Downtown Disney on which holiday?", 
+                answers: ["4th of July", "Independence Day", "Fourth of July"], 
+                difficulty: "Hard", 
+                hint: "🎆🎇🎆🎇🎆🎇🎆🎇🎆" 
+            },
+            { 
+                question: "If you get this last question wrong, there will be consequences.<br><br>What is Mr. Panda's favorite vape flavor?", 
+                answers: ["Bamboo Ice"], 
+                difficulty: "Hard", 
+                hint: "You might needa ask Mr. Panda again..." 
+            }
         ];
 
         let currentQuestionIndex = 0;
@@ -67,9 +97,9 @@
 
         document.getElementById("submit-btn").addEventListener("click", function() {
             const userAnswer = document.getElementById("answer-input").value.trim().toLowerCase();
-            const correctAnswer = quizData[currentQuestionIndex].answer.toLowerCase();
+            const correctAnswers = quizData[currentQuestionIndex].answers.map(ans => ans.toLowerCase()); // Normalize answers
 
-            if (userAnswer === correctAnswer) {
+            if (correctAnswers.includes(userAnswer)) {
                 currentQuestionIndex++;
                 if (currentQuestionIndex < quizData.length) {
                     loadQuestion();
@@ -97,6 +127,10 @@
                 spread: 70,
                 origin: { x: 0.5, y: 0.5 } // Center of the screen
             });
+
+            const music = document.getElementById("background-music");
+            music.volume = 0.5; // Adjust volume (0.0 to 1.0)
+            music.play().catch(error => console.log("Autoplay blocked:", error));
         });
 
         function loadQuestion() {
@@ -104,7 +138,7 @@
             const currentDifficulty = quizData[currentQuestionIndex].difficulty.toLowerCase();
 
             document.getElementById("question-number").textContent = currentQuestionIndex + 1;
-            document.getElementById("question-text").textContent = quizData[currentQuestionIndex].question;
+            document.getElementById("question-text").innerHTML = quizData[currentQuestionIndex].question;
             document.getElementById("answer-input").value = ""; // Clear input
 
             difficultySpan.textContent = quizData[currentQuestionIndex].difficulty;
