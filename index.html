@@ -58,7 +58,15 @@
         <img class="floating-image" src="image12.jpg" alt="Floating Image">
     </div>
 
-    <audio id="background-music" src="audio.mp3"></audio>
+    <audio id="background-music" loop>
+        <source src="audio.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <audio id="prebackground-music" loop>
+        <source src="audio2.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
 
     <script>
         const quizData = [
@@ -105,6 +113,11 @@
         document.getElementById("continue-btn").addEventListener("click", function() {
             document.getElementById("error-screen").style.display = "none";
             document.getElementById("quiz-screen").style.display = "block";
+
+            const music = document.getElementById("prebackground-music");
+            music.volume = 0.10; 
+            music.play().catch(error => console.log("Autoplay blocked:", error));
+
             loadQuestion();
         });
 
@@ -129,20 +142,27 @@
             document.getElementById("congrats-screen").style.display = "none";
             document.getElementById("valentine-screen").style.display = "block";
         });
-
+        
         document.getElementById("yes-btn").addEventListener("click", function() {
             document.getElementById("valentine-screen").style.display = "none";
             document.getElementById("final-screen").style.display = "block";
 
             // Trigger confetti animation
             confetti({
-                particleCount: 200,
-                spread: 70,
-                origin: { x: 0.5, y: 0.5 } // Center of the screen
+                particleCount: 450,
+                spread: 130,
+                origin: { x: 0.5, y: 0.5 }, 
+                scalar: 2, 
+                gravity: 0.5,
+                decay: 0.95,
+                ticks: 350
             });
 
+            const stop_music = document.getElementById("prebackground-music");
+            stop_music.pause();
+
             const music = document.getElementById("background-music");
-            music.volume = 0.5; // Adjust volume (0.0 to 1.0)
+            music.volume = 0.30; 
             music.play().catch(error => console.log("Autoplay blocked:", error));
         });
 
@@ -186,9 +206,8 @@
                     const screenWidth = window.innerWidth;
                     const screenHeight = window.innerHeight;
 
-                    // Randomize the X and Y positions anywhere within the screen boundaries
-                    const randomX = Math.random() * screenWidth; // Random X within the screen width
-                    const randomY = Math.random() * screenHeight; // Random Y within the screen height
+                    const randomX = Math.random() * screenWidth; 
+                    const randomY = Math.random() * screenHeight; 
 
                     // Apply the new random position
                     img.style.left = `${randomX}px`;
@@ -229,28 +248,23 @@
                     const randomFadeDuration = Math.random() * 3 + 2; // Between 2s and 5s
                     const randomDelay = Math.random() * 3; // Up to 3s delay
 
-                    // Create the keyframes CSS rule dynamically
                     const keyframes = createKeyframes(xDirection, yDirection);
 
-                    // Create a new style element to insert the keyframes rule
                     const styleSheet = document.createElement('style');
                     styleSheet.innerHTML = keyframes;
 
-                    // Append the style element to the head of the document
                     document.head.appendChild(styleSheet);
 
-                    // Apply animation to the image
                     img.style.animation = `
                         floatAround ${randomDuration}s infinite alternate ease-in-out ${randomDelay}s,
                         fadeInOut ${randomFadeDuration}s infinite alternate ease-in-out ${randomDelay}s`;
 
                     // Randomize location after fade out is complete (i.e., once animation ends)
                     img.addEventListener('animationiteration', function () {
-                        randomizePosition(); // Randomize location after each animation cycle
+                        randomizePosition(); 
                     });
                 }
 
-                // Call the function to position the image randomly and start the animation
                 randomizePosition(); // Initial position
                 startFloatingAnimation(); // Start the animation process
             });
