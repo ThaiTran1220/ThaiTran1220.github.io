@@ -101,3 +101,36 @@ button:hover {
     transition: font-size 0.2s ease;
 }
 
+.floating-image {
+    position: absolute;
+    width: 125px; /* You can adjust size */
+    height: auto;
+    opacity: 0; /* Invisible initially */
+    pointer-events: none; /* Prevent blocking clicks */
+    animation: floatAround 10s infinite alternate ease-in-out, fadeInOut 5s infinite alternate ease-in-out;
+}
+
+/* Keyframes for floating and random movement */
+@keyframes floatAround {
+    0% { transform: translate(0px, 0px) rotate(0deg); }
+    25% { transform: translate(30px, -50px) rotate(10deg); }
+    50% { transform: translate(-40px, 30px) rotate(-10deg); }
+    75% { transform: translate(50px, -30px) rotate(15deg); }
+    100% { transform: translate(-30px, 40px) rotate(-5deg); }
+}
+
+/* Keyframes for fading in and out */
+@keyframes fadeInOut {
+    0% { 
+        opacity: 0;
+        transform: translate(0px, 0px);
+    }
+    50% { 
+        opacity: 1;
+        transform: translate(30px, 50px);
+    }
+    100% { 
+        opacity: 0;
+        transform: translate(-40px, -40px);
+    }
+}

@@ -43,6 +43,19 @@
         <h1>🎉🎉🎉🎉🎉🎉🎉🎉🎉</h1>
         <img id="special-gif" src="baobei.GIF" alt="Special Moment">
         <p>❤️❤️❤️</p>
+
+        <img class="floating-image" src="image1.jpg" alt="Floating Image">
+        <img class="floating-image" src="image2.jpg" alt="Floating Image">
+        <img class="floating-image" src="image3.jpg" alt="Floating Image">
+        <img class="floating-image" src="image4.jpg" alt="Floating Image">
+        <img class="floating-image" src="image5.jpg" alt="Floating Image">
+        <img class="floating-image" src="image6.jpg" alt="Floating Image">
+        <img class="floating-image" src="image7.jpg" alt="Floating Image">
+        <img class="floating-image" src="image8.jpg" alt="Floating Image">
+        <img class="floating-image" src="image9.jpg" alt="Floating Image">
+        <img class="floating-image" src="image10.jpg" alt="Floating Image">
+        <img class="floating-image" src="image11.jpg" alt="Floating Image">
+        <img class="floating-image" src="image12.jpg" alt="Floating Image">
     </div>
 
     <audio id="background-music" src="audio.mp3"></audio>
@@ -57,7 +70,7 @@
             },
             { 
                 question: "Which cologne do I currently like? (exact name, excluding the brand name)", 
-                answers: ["Peony & Blush Suede"], 
+                answers: ["Peony & Blush Suede", "Peony & Blush"], 
                 difficulty: "Easy", 
                 hint: "No hints for easy questions 😤😤"
             },
@@ -163,6 +176,85 @@
             noBtn.style.top = `${randomY}px`;
         });
 
+        document.addEventListener("DOMContentLoaded", function () {
+            const floatingImages = document.querySelectorAll(".floating-image");
+
+            floatingImages.forEach(img => {
+                // Function to randomize the position of each image
+                function randomizePosition() {
+                    // Get the screen width and height
+                    const screenWidth = window.innerWidth;
+                    const screenHeight = window.innerHeight;
+
+                    // Randomize the X and Y positions anywhere within the screen boundaries
+                    const randomX = Math.random() * screenWidth; // Random X within the screen width
+                    const randomY = Math.random() * screenHeight; // Random Y within the screen height
+
+                    // Apply the new random position
+                    img.style.left = `${randomX}px`;
+                    img.style.top = `${randomY}px`;
+                }
+
+                // Function to randomize the direction of the floating animation
+                function randomizeDirection() {
+                    const randomXDirection = Math.random() > 0.5 ? 1 : -1; // Random horizontal direction (1 for right, -1 for left)
+                    const randomYDirection = Math.random() > 0.5 ? 1 : -1; // Random vertical direction (1 for down, -1 for up)
+
+                    return {
+                        xDirection: randomXDirection,
+                        yDirection: randomYDirection
+                    };
+                }
+
+                // Function to create the @keyframes rule dynamically
+                function createKeyframes(xDirection, yDirection) {
+                    return `
+                        @keyframes floatAround {
+                            0% {
+                                transform: translate(${xDirection * 50}px, ${yDirection * 50}px);
+                            }
+                            100% {
+                                transform: translate(${xDirection * 200}px, ${yDirection * 200}px);
+                            }
+                        }
+                    `;
+                }
+
+                // Function to start the animation for the image with randomized directions
+                function startFloatingAnimation() {
+                    const { xDirection, yDirection } = randomizeDirection();
+
+                    // Randomize the duration of the animation and fading
+                    const randomDuration = Math.random() * 5 + 5; // Between 5s and 10s
+                    const randomFadeDuration = Math.random() * 3 + 2; // Between 2s and 5s
+                    const randomDelay = Math.random() * 3; // Up to 3s delay
+
+                    // Create the keyframes CSS rule dynamically
+                    const keyframes = createKeyframes(xDirection, yDirection);
+
+                    // Create a new style element to insert the keyframes rule
+                    const styleSheet = document.createElement('style');
+                    styleSheet.innerHTML = keyframes;
+
+                    // Append the style element to the head of the document
+                    document.head.appendChild(styleSheet);
+
+                    // Apply animation to the image
+                    img.style.animation = `
+                        floatAround ${randomDuration}s infinite alternate ease-in-out ${randomDelay}s,
+                        fadeInOut ${randomFadeDuration}s infinite alternate ease-in-out ${randomDelay}s`;
+
+                    // Randomize location after fade out is complete (i.e., once animation ends)
+                    img.addEventListener('animationiteration', function () {
+                        randomizePosition(); // Randomize location after each animation cycle
+                    });
+                }
+
+                // Call the function to position the image randomly and start the animation
+                randomizePosition(); // Initial position
+                startFloatingAnimation(); // Start the animation process
+            });
+        });
 
     </script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
